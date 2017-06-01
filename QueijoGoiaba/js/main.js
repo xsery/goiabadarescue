@@ -18,6 +18,8 @@ game.state.add('game', GameState);
 game.state.add('win', WinState);
 game.state.add('lose', LoseState);
 game.state.add('credits', CreditsState);
+game.state.add('level2', Level2State);
+game.state.add('level3', Level3State);
 
 // Iniciando primeiro estado do jogo
 game.state.start('menu');

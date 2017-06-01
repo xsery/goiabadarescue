@@ -11,10 +11,24 @@ MenuState.prototype.preload = function(){
 
 MenuState.prototype.create = function(){
     
+    
+    
+    //adiciona o botao a tela
     this.newGame = game.add.sprite(150, 300, 'newGame');
+    
+    //defini a posicao da ancora do botao
     this.newGame.anchor.set(0.5);
+    
+    //habilita a iteração ao botao
     this.newGame.inputEnabled = true;
+    
+    aqui chama o evento de clique e passa a função que vai chamar a tela
     this.newGame.events.onInputDown.add(this.listener, this);
+    
+    
+    
+    
+    
     
     this.credits = game.add.sprite(400, 300, 'credits');
     this.credits.anchor.set(0.5);
@@ -36,6 +50,7 @@ MenuState.prototype.update = function(){
 MenuState.prototype.listener = function(){
     
     this.game.state.start('game');
+    
 }
 
 MenuState.prototype.listenerCredits = function(){
