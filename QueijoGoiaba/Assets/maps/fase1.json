@@ -25,43 +25,7 @@
         {
          "draworder":"topdown",
          "name":"Itens",
-         "objects":[
-                {
-                 "gid":357,
-                 "height":32,
-                 "id":38,
-                 "name":"diamond",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":643,
-                 "y":385
-                }, 
-                {
-                 "gid":357,
-                 "height":32,
-                 "id":40,
-                 "name":"diamond",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1206,
-                 "y":258
-                }, 
-                {
-                 "gid":357,
-                 "height":32,
-                 "id":41,
-                 "name":"diamond",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":621,
-                 "y":201
-                }],
+         "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -98,7 +62,7 @@
          "tilewidth":32
         }, 
         {
-         "columns":4,
+         "columns":0,
          "firstgid":353,
          "image":"..\/..\/..\/goiabadarescue.github.io\/QueijoGoiaba\/Assets\/spritesheets\/items.png",
          "imageheight":128,
@@ -106,7 +70,7 @@
          "margin":0,
          "name":"items",
          "spacing":0,
-         "tilecount":16,
+         "tilecount":0,
          "tileheight":32,
          "tilewidth":32
         }],
