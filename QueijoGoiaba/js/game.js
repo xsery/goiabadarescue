@@ -17,7 +17,7 @@ GameState.prototype.preload = function() {
 
     // Para carregar um spritesheet, é necessário saber a altura e largura de cada sprite, e o número de sprites no arquivo
     // No caso do player.png, os sprites são de 32x32 pixels, e há 8 sprites no arquivo
-    this.game.load.spritesheet('player', 'Assets/spritesheets/player.png', 32, 32, 8);
+    this.game.load.spritesheet('player', 'Assets/spritesheets/player.png', 45, 100, 11);
     this.game.load.spritesheet('itens', 'Assets/spritesheets/itens.png', 32, 32, 16);
     this.game.load.spritesheet('enemies', 'Assets/spritesheets/enemies.png', 32, 32, 12);
     
@@ -98,9 +98,9 @@ GameState.prototype.create = function() {
     // Para criar uma animação, utilizamos animations.add()
     // Parâmetros: nome da animação, lista de quadros, quadros por segundo da animação
     // https://photonstorm.github.io/phaser-ce/Phaser.AnimationManager.html
-    this.player.animations.add('walk', [0, 1, 2, 1], 6);
-    this.player.animations.add('idle', [5, 5, 5, 5, 5, 5, 6, 5, 6, 5], 6);
-    this.player.animations.add('jump', [4], 8);
+    this.player.animations.add('walk', [0, 1, 3, 4, 5, 8, 9, 10], 20);
+    this.player.animations.add('idle', [0, 1, 1, 2, 0, 2], 20);
+    this.player.animations.add('jump', [4, 5, 6], 11);
     
     // Adicionando entradas
     // createCursorKeys() cria automaticamente mapeamentos para as 4 teclas de direção
