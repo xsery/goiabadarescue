@@ -17,7 +17,7 @@ GameState.prototype.preload = function() {
 
     // Para carregar um spritesheet, é necessário saber a altura e largura de cada sprite, e o número de sprites no arquivo
     // No caso do player.png, os sprites são de 32x32 pixels, e há 8 sprites no arquivo
-    this.game.load.spritesheet('player', 'Assets/spritesheets/player.png', 32, 32, 8);
+    this.game.load.spritesheet('player', 'Assets/spritesheets/goiabada.png', 170, 74, 8);
     this.game.load.spritesheet('itens', 'Assets/spritesheets/itens.png', 32, 32, 16);
     this.game.load.spritesheet('enemies', 'Assets/spritesheets/enemies.png', 32, 32, 12);
     
@@ -80,7 +80,7 @@ GameState.prototype.create = function() {
     // Como estamos usando um spritesheet, é necessário informar qual sprite vamos usar
     // A contagem é da mesma forma do que nos tiles do mapa, mas o primeiro sprite recebe
     // o número 0 ao invés de 1.
-    this.player = this.game.add.sprite(160, 64, 'player', 5);
+    this.player = this.game.add.sprite(170, 74, 'player', 5);
     // Ajustando âncora do jogador (ponto de referência para posicionamento)
     this.player.anchor.setTo(0.5, 0.5);
     // Ativando física para o jogador

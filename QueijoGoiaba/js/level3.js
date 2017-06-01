@@ -28,20 +28,20 @@ Level3State.prototype.preload = function() {
 Level3State.prototype.create = function() {
 	
 	this.level3 = this.game.add.tilemap('level3');
-     this.level3.addTilesetImage('fase3', 'mapTiles');
+    this.level3.addTilesetImage('fase3', 'mapTiles');
 
-    this.bgLayer = this.level1.createLayer('BG');
-    this.lavaLayer = this.level1.createLayer('Grades');
-    this.lavaLayer = this.level1.createLayer('Itens');
-    this.lavaLayer = this.level1.createLayer('Lava');
-    this.wallsLayer = this.level1.createLayer('Walls');
+    this.bgLayer = this.level3.createLayer('BG');
+    this.lavaLayer = this.level3.createLayer('Grades');
+    this.lavaLayer = this.level3.createLayer('Itens');
+    this.lavaLayer = this.level3.createLayer('Lava');
+    this.wallsLayer = this.level3.createLayer('Walls');
     // Mais informações sobre tilemaps:
 	
 	
 	this.wallsLayer.resizeWorld();
 	
 	
-	this.level3.setCollisionByExclusion([21, 22, 85, 86, 149, 213, 277, 278, 341, 342, 405, 469, 533, 597, 661, 725, 789, 853, 917, 981], true, this.wallsLayer);
+	this.level3.setCollisionByExclusion([2, 22, 84, 85, 150, 214, 276, 277, 340, 341, 406, 468, 534, 596, 660, 724, 788, 852, 916, 980], true, this.wallsLayer);
     
     this.level3.setCollision([214], true, this.lavaLayer);
 	

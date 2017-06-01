@@ -43,7 +43,7 @@ Level2State.prototype.create = function() {
     this.lavaLayer = this.level2.createLayer('Lava');
     this.wallsLayer = this.level2.createLayer('Walls');
 	
-	this.level2.setCollisionByExclusion([21, 22, 96, 97, 171, 246, 321, 322, 396, 397, 471, 546, 621, 696, 771, 846, 921, 996, 1071, 1146], true, this.wallsLayer);
+	this.level2.setCollisionByExclusion([2, 22, 96, 97, 171, 246, 321, 322, 396, 397, 471, 546, 621, 696, 771, 846, 922, 995, 1070, 1145], true, this.wallsLayer);
     
     this.level2.setCollision([247], true, this.lavaLayer);
 	
@@ -87,20 +87,67 @@ Level2State.prototype.create = function() {
     // Especificamente, estamos criando physicsGroups, que já armazenam objetos com física ativada
     // https://photonstorm.github.io/phaser-ce/Phaser.GameObjectFactory.html#physicsGroup
     
-	
-	// Criando assets de som com this.game.add.audio()
+    // Criando objetos que foram criados em um layer de objetos do Tiled
+    // Parâmetros do createFromObjects():
+    // nome do layer do Tiled de onde vamos criar os objetos
+    // nome dos objetos do Tiled que serão criados
+    // nome do spritesheet carregado no preload() com os objetos
+    // frame do spritesheet, basta setar para um dos frames do objeto em questão
+    // true, false - estes dois parâmetros podem ficar com estes valores
+    // grupo - qual grupo do Phaser devemos adicionar esses objetos
+    
+    // Grupo de diamantes
+    this.diamonds = this.game.add.physicsGroup();
+    this.level1.createFromObjects('Itens', 'diamond', 'itens', 5, true, false, this.diamonds);
+    // Para cada objeto do grupo, vamos executar uma função
+    this.diamonds.forEach(function(diamond){
+        // body.immovable = true indica que o objeto não é afetado por forças externas
+        diamond.body.immovable = true;
+        // Adicionando animações; o parâmetro true indica que a animação é em loop
+        diamond.animations.add('spin', [4, 5, 6, 7, 6, 5], 6, true);
+        diamond.animations.play('spin');
+    });
+
+    // Grupo de morcegos:
+    this.bats = this.game.add.physicsGroup();
+    this.level1.createFromObjects('Enemies', 'bat', 'enemies', 8, true, false, this.bats);
+    this.bats.forEach(function(bat){
+        bat.anchor.setTo(0.5, 0.5);
+        bat.body.immovable = true;
+        bat.animations.add('fly', [8, 9, 10], 6, true);
+        bat.animations.play('fly');
+        // Velocidade inicial do inimigo
+        bat.body.velocity.x = 100;
+        // bounce.x=1 indica que, se o objeto tocar num objeto no eixo x, a força deverá
+        // ficar no sentido contrário; em outras palavras, o objeto é perfeitamente elástico
+        bat.body.bounce.x = 1;
+    });
+
+    // Criando assets de som com this.game.add.audio()
     // O parâmetro é o nome do asset definido no preload()
     this.jumpSound = this.game.add.audio('jumpSound');
     this.pickupSound = this.game.add.audio('pickupSound');
     this.playerDeathSound = this.game.add.audio('playerDeath');
     this.enemyDeathSound = this.game.add.audio('enemyDeath');
-	
-	
-     // Música de fundo - criada da mesma forma, mas com o parâmetro loop = true
+    
+    // Música de fundo - criada da mesma forma, mas com o parâmetro loop = true
     this.music = this.game.add.audio('music');
     this.music.loop = true;
     // Já iniciamos a música aqui mesmo pra ficar tocando ao fundo
     this.music.play();
+    
+    // HUD de score
+    // A linha abaixo adiciona um texto na tela, e a próxima faz com o que o texto fique
+    // fixo na câmera, dessa forma não vai se deslocar quando a câmera mudar
+    this.scoreText = this.game.add.text(10, 0, "Score: 0", 
+                            {font: "20px ", fill: "#000000"});
+    this.scoreText.fixedToCamera = true;
+    
+    // Estado do jogo - Variáveis para guardar quaisquer informações pertinentes para as condições de 
+    // vitória/derrota, ações do jogador, etc
+    this.totalDiamonds = this.diamonds.length;
+    this.collectedDiamonds = 0;
+    this.score = 0;
     
 }
 
@@ -108,60 +155,45 @@ Level2State.prototype.create = function() {
 
 Level2State.prototype.update = function() {
 	
-	 // Detecção de colisões
-    // Todas as colisões entre os objetos do jogo são avaliadas com arcade.collide() ou 
-    // arcade.overlap(). O Phaser irá automaticamente calcular a colisão dos objetos
-    // Inicialmente, adicionando colisões do player com as paredes da fase, que é um layer:
-    this.game.physics.arcade.collide(this.player, this.wallsLayer);
-
-    // Adicionando colisões do jogador com outros elementos, onde há uma função de tratamento
-    // Cada colisão terá um callback, que é o terceiro parâmetro, que irá fazer alguma coisa
-    // sempre que essa quando essa colisão ocorrer; este callback receberá os 2 objetos que 
-    // colidiram; veremos mais abaixo na implementação
-    // Colisão com a lava - o jogador morre
-    this.game.physics.arcade.collide(this.player, this.lavaLayer, this.lavaDeath, null, this);
-    // Colisão com os diamantes - devem ser coletados
-	
-     // Movimentação do player
-    // Para detectar se uma das teclas referenciadas foi pressionada,
-    // basta verificar a variável .isDown da mesma
-    // Caso seja a tecla para a esquerda, ajustar uma velocidade negativa
-    // ao eixo X, que fará a posição X diminuir e consequentemente o jogador
-    // ir para a esquerda;
-    if(this.keys.left.isDown){
-        this.player.body.velocity.x = -150; // Ajustar velocidade
-        // Se o jogador estiver virado para a direita, inverter a escala para que ele vire para o outro lado
-        if(this.player.scale.x == 1) this.player.scale.x = -1;
-        // Iniciando a animação 'walk'
-        this.player.animations.play('walk');
-    }
-    // Se a tecla direita estiver pressionada (this.keys.right.isDown == true),
-    // mover o sprite para a direita
-    else if(this.keys.right.isDown){
-        // se a tecla direita estiver pressionada
-        this.player.body.velocity.x = 150;  // Ajustar velocidade
-        // Se o jogador estiver virado para a direita, inverter a escala para que ele vire para o outro lado
-        if(this.player.scale.x == -1) this.player.scale.x = 1;
-        this.player.animations.play('walk');
-    }
-    else {
-        // Ajustar velocidade para zero
-        this.player.body.velocity.x = 0;
-        this.player.animations.play('idle');
-    }
-
-    // Se o a barra de espaço ou a tecla cima estiverem pressionadas, e o jogador estiver com a parte de baixo tocando em alguma coisa
-    if((this.jumpButton.isDown || this.keys.up.isDown) && (this.player.body.touching.down || this.player.body.onFloor())){
-        // Adicione uma velocidade no eixo Y, fazendo o jogador pular
-        this.player.body.velocity.y = -400;
-        // Tocando o som de pulo
-        this.jumpSound.play();
-    }
-
-    // Se o jogador não estiver no chão, inicie a animação 'jump'
-    if(!this.player.body.touching.down && !this.player.body.onFloor()){
-        this.player.animations.play('jump');
-    }
+	 // Inicializando jogador
+    // Adicionando o sprite do jogador na posição (160, 64) usando o asset 'player'
+    // Como estamos usando um spritesheet, é necessário informar qual sprite vamos usar
+    // A contagem é da mesma forma do que nos tiles do mapa, mas o primeiro sprite recebe
+    // o número 0 ao invés de 1.
+    this.player = this.game.add.sprite(160, 64, 'player', 5);
+    // Ajustando âncora do jogador (ponto de referência para posicionamento)
+    this.player.anchor.setTo(0.5, 0.5);
+    // Ativando física para o jogador
+    this.game.physics.enable(this.player);
+    // Ativando gravidade para o jogador
+    // Como é positiva no eixo Y, o jogador terá uma gravidade "normal",
+    // ou seja, irá acelerar para baixo
+    this.player.body.gravity.y = 800;
+    // Como o "mundo" é maior do que a área visível, é necessário que a câmera siga o jogador.
+    // https://photonstorm.github.io/phaser-ce/Phaser.Camera.html#follow
+    this.game.camera.follow(this.player);
+    
+    // Animações do jogador
+    // Animações, no contexto do Phaser, nada mais são do que sequências de frames do spritesheet
+    // Para criar uma animação, utilizamos animations.add()
+    // Parâmetros: nome da animação, lista de quadros, quadros por segundo da animação
+    // https://photonstorm.github.io/phaser-ce/Phaser.AnimationManager.html
+    this.player.animations.add('walk', [0, 1, 2, 1], 6);
+    this.player.animations.add('idle', [5, 5, 5, 5, 5, 5, 6, 5, 6, 5], 6);
+    this.player.animations.add('jump', [4], 8);
+    
+    // Adicionando entradas
+    // createCursorKeys() cria automaticamente mapeamentos para as 4 teclas de direção
+    // https://photonstorm.github.io/phaser-ce/Phaser.Keyboard.html#createCursorKeys
+    // Lista de teclas disponíveis: https://photonstorm.github.io/phaser-ce/Phaser.KeyCode.html
+    this.keys = this.game.input.keyboard.createCursorKeys();
+    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    
+    // Adicionando objetos do Tiled, utilizando grupos
+    // Um grupo é como se fosse um array de sprites, mas com várias facilidades adicionais, 
+    // como por exemplo alterar atributos e facilitar detectar colisões com objetos do grupo
+    // Especificamente, estamos criando physicsGroups, que já armazenam objetos com física ativada
+    // https://photonstorm.github.io/phaser-ce/Phaser.GameObjectFactory.html#physicsGroup
 	
 }
 
