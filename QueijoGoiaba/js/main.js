@@ -22,4 +22,4 @@ game.state.add('level2', Level2State);
 game.state.add('level3', Level3State);
 
 // Iniciando primeiro estado do jogo
-game.state.start('level2');
+game.state.start('menu');
