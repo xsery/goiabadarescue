@@ -1,11 +1,13 @@
 .title {
   text-align: center;
   color: black;
-}
+  
+ }
+
 
 body{
-    font-family: monospace;
-    font-size: 32px;
+    font-family: Moon Flower;
+    font-size: 46px;
     background-color: palevioletred;
     background-size: 800px 600px;
 }
@@ -13,7 +15,7 @@ body{
 
 canvas {   
   display: table;
-  margin: 160 auto;
+  margin: 80 auto;
   border: 20px dotted black;
   
 }

@@ -168,7 +168,7 @@ GameState.prototype.create = function() {
     // A linha abaixo adiciona um texto na tela, e a próxima faz com o que o texto fique
     // fixo na câmera, dessa forma não vai se deslocar quando a câmera mudar
     this.scoreText = this.game.add.text(10, 0, "Score: 0", 
-                            {font: "28px ", fill: "#ffffff"});
+                            {font: "20px ", fill: "#000000"});
     this.scoreText.fixedToCamera = true;
     
     // Estado do jogo - Variáveis para guardar quaisquer informações pertinentes para as condições de 
