@@ -15,7 +15,7 @@ MenuState.prototype.create = function(){
     this.newGame.inputEnabled = true;
     this.newGame.events.onInputDown.add(this.listener, this);
     
-    this.credits = game.add.sprite(300, 300, 'credits');
+    this.credits = game.add.sprite(100, 300, 'credits');
     this.credits.anchor.set(0.5);
     this.credits.inputEnabled = true;
     this.credits.events.onInputDown.add(this.listenerCredits, this);
