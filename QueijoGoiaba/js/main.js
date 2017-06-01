@@ -17,6 +17,7 @@ game.state.add('menu', MenuState);
 game.state.add('game', GameState);
 game.state.add('win', WinState);
 game.state.add('lose', LoseState);
+game.state.add('credits', CreditsState);
 
 // Iniciando primeiro estado do jogo
 game.state.start('menu');
